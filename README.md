@@ -1,3 +1,15 @@
+<h3>Инструкция для модуля тех. поддержки</h3>
+
+1. Провести миграцию (затем вручную исправить значение по умолчанию в requests.date_create на CURRENT_TIMESTAMP (не знаю, как сделать это по умолчанию)).
+2. В common/config/main.php добавить:
+```
+    'modules' => [
+        'techsup' => [
+            'class' => 'common\modules\techsup\Techsup',
+        ],
+    ],
+```
+
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
         <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
@@ -58,3 +70,5 @@ frontend
 vendor/                  contains dependent 3rd-party packages
 environments/            contains environment-based overrides
 ```
+
+
