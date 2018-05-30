@@ -8,6 +8,7 @@ use common\modules\techsup\models\RequestsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\ActiveRecord;
 
 /**
  * RequestsController implements the CRUD actions for Requests model.
@@ -36,7 +37,7 @@ class RequestsController extends Controller
     public function actionIndex()
     {
         $searchModel = new RequestsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $date = 'date_create', $status = 0);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -104,9 +105,40 @@ class RequestsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $status_id = $model->status_id;
+
+        $model->delete();
+
+        if ($status_id == Requests::STATUS_ACTIVE) {
+            return $this->redirect(['index']);
+        } else {
+            return $this->redirect(['archive']);
+        }
+    }
+
+    public function actionDone($id) {
+        $model = $this->findModel($id);;
+
+        $model->status_id = Requests::STATUS_INACTIVE;
+        $model->date_end = Yii::$app->formatter->asTimestamp(date('d.m.Y H:i:s'));
+        $model->save();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionArchive() {
+        $searchModel = new RequestsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $date = 'date_end', $status = 1);
+
+        return $this->render('archive', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionTerms() {
+        return $this->render('terms');
     }
 
     /**

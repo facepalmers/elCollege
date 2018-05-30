@@ -8,7 +8,7 @@ use common\modules\techsup\models\Requests;
 /* @var $searchModel common\modules\techsup\models\RequestsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Активные заявки';
+$this->title = 'Архив';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="requests-index">
@@ -16,10 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?php //Html::a('Создать заявку', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -33,17 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             //'description:ntext',
             'date_create',
-            //'date_end',
+            'date_end',
             //'status_id',
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{view} {update} {done}',
-                'buttons' => [
-                    'done' => function($url, $model, $key) {
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', ['done', 'id' => $model->id]);
-                    }
-                ],
-            ],
+
+            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
     <?php Pjax::end(); ?>

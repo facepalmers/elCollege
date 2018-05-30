@@ -33,12 +33,12 @@ class m180512_112900_requests extends Migration
             'name' => $this->string(25)->notNull(),
             'email' => $this->string(50)->notNull(),
             'phone' => $this->integer(12),
-            'category' => $this->string(50)->notNull(),
+            'category' => $this->integer(50)->notNull(),
             'title' => $this->string(50)->notNull(),
             'description' => $this->text()->notNull(),
             'date_create' => $this->timestamp(),
-            'date_end' => $this->dateTime(),
-            'status_id' => $this->integer(3)->notNull()->defaultValue(0),
+            'date_end' => $this->timestamp(),
+            'status_id' => $this->integer(3)->notNull()->defaultValue(1),
         ]);
     }
 

@@ -2,12 +2,17 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use common\modules\techsup\models\Requests;
 
 /* @var $this yii\web\View */
 /* @var $model common\modules\techsup\models\Requests */
 
-$this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Requests', 'url' => ['index']];
+$this->title = $model->title;
+if ($model->status_id == 0) {
+    $this->params['breadcrumbs'][] = ['label' => 'Заявки', 'url' => ['index']];
+} else {
+    $this->params['breadcrumbs'][] = ['label' => 'Архив', 'url' => ['archive']];
+}
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="requests-view">
@@ -15,11 +20,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Изменить', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены, что хотите удалить заявку?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -31,13 +36,30 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'email:email',
-            'phone',
-            'category',
+            [
+                'attribute' => 'phone',
+                'label' => Requests::attributeLabels()["phone"],
+                'visible' => Requests::isPhoneExist($model->phone),
+            ],
+            [
+                'attribute' => 'category',
+                'label' => Requests::attributeLabels()["category"],
+                'value' => Requests::getCategoryList()[$model->category],
+            ],
             'title',
             'description:ntext',
-            'date_create',
-            'date_end',
-            'status_id',
+            'date_create:datetime',
+            [
+                'attribute' => 'date_end',
+                'format' => 'datetime',
+                'label' => Requests::attributeLabels()["date_end"],
+                'visible' => $model->status_id,
+            ],
+            [
+                'attribute' => 'status_id',
+                'label' => Requests::attributeLabels()["status_id"],
+                'value' => Requests::getStatusList()[$model->status_id],
+            ],
         ],
     ]) ?>
 

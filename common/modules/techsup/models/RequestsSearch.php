@@ -39,14 +39,23 @@ class RequestsSearch extends Requests
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $date, $status)
     {
-        $query = Requests::find();
+        $query = Requests::find()->where(['status_id' => $status]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 12,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    $date => SORT_DESC,
+                    'status_id' => $status
+                ],
+            ],
         ]);
 
         $this->load($params);

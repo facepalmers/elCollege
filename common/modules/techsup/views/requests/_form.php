@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\behaviors\TimeStampBehavior;
+use common\modules\techsup\models\Requests;
 
 /* @var $this yii\web\View */
 /* @var $model common\modules\techsup\models\Requests */
@@ -17,16 +17,24 @@ use yii\behaviors\TimeStampBehavior;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'phone')->textInput() ?>
+    <?= $form->field($model, 'phone')->widget(\yii\widgets\MaskedInput::className(), [
+        'mask' => '+7 (999) 999 99 99',
+        'options' => [
+            'class' => 'form-control',
+            'placeholder' => 'Необязательно',
+        ]
+    ]) ?>
 
-    <?= $form->field($model, 'category')->dropDownList(['Первая категория', 'Вторая категория']) //сделать константы ?>
+    <?= $form->field($model, 'category')->dropDownList(Requests::getCategoryList()) ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
+    <?= $terms ?>
+
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
